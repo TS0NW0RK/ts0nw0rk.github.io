@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>WebKit Vulnerabilities</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <style>
+    :root {
+      --bg: #000;
+      --fg: #fff;
+      --muted: rgba(255,255,255,0.6);
+      --glass: rgba(255,255,255,0.06);
+      --border: rgba(255,255,255,0.12);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--fg);
+      font-family: Inter, -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif;
+      line-height: 1.5;
+    }
+
+    main {
+      max-width: 1100px;
+      padding: 64px 24px;
+      margin: 0 auto;
+    }
+
+    header {
+      margin-bottom: 48px;
+    }
+
+    h1 {
+      font-size: 36px;
+      font-weight: 600;
+      margin: 0 0 8px 0;
+    }
+
+    header p {
+      color: var(--muted);
+      max-width: 600px;
+    }
+
+    .vuln-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 24px;
+    }
+
+    .vuln-card {
+      background: var(--glass);
+      backdrop-filter: blur(12px);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 20px;
+      transition: transform 0.15s ease, border-color 0.15s ease;
+    }
+
+    .vuln-card:hover {
+      transform: translateY(-2px);
+      border-color: rgba(255,255,255,0.25);
+    }
+
+    .vuln-header {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 12px;
+    }
+
+    .vuln-id {
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .poc {
+      font-size: 12px;
+    }
+
+    .poc.no {
+      color: var(--muted);
+    }
+
+    .vuln-title {
+      font-size: 17px;
+      font-weight: 500;
+      margin: 0 0 12px 0;
+    }
+
+    .vuln-meta {
+      display: flex;
+      gap: 12px;
+      font-size: 12px;
+      color: var(--muted);
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <header>
+      <h1>WebKit Vulnerabilities</h1>
+      <p>Curated WebKit security vulnerabilities with technical descriptions and proof-of-concept availability.</p>
+    </header>
+
+    <section class="vuln-list" id="vulnList">
+      <!-- Cards injected here -->
+    </section>
+  </main>
+
+  <script>
+    fetch("src/data/vulns.json")
+      .then(res => res.json())
+      .then(data => {
+        const container = document.getElementById("vulnList");
+
+        data
+          .sort((a, b) => new Date(b.date) - new Date(a.date))
+          .forEach(v => {
+            const card = document.createElement("article");
+            card.className = "vuln-card";
+
+            card.innerHTML = `
+              <div class="vuln-header">
+                <span class="vuln-id">${v.id}</span>
+                <span class="poc ${v.poc ? "" : "no"}">
+                  ${v.poc ? "PoC" : "No PoC"}
+                </span>
+              </div>
+
+              <h2 class="vuln-title">${v.title}</h2>
+
+              <div class="vuln-meta">
+                <span>${v.impact}</span>
+                <span>${v.webkit_version}</span>
+                <span>${v.date}</span>
+              </div>
+            `;
+
+            container.appendChild(card);
+          });
+      })
+      .catch(err => {
+        console.error("Failed to load vulns.json", err);
+      });
+  </script>
+</body>
+</html>
