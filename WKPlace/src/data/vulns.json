@@ -4,7 +4,7 @@
   {
     "id": "CVE-2025-43541",
     "impact": "Processing maliciously crafted web content may lead to an unexpected Safari crash",
-    "description": "A type confusion issue was addressed with improved state handling."
+    "description": "A type confusion issue was addressed with improved state handling.",
     "poc": "src/data/poc202543541.html"  
   },
   {
