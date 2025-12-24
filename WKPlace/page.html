@@ -1,103 +1,93 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <title>Vulnerability</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta charset="utf-8" />
+<title>Vulnerability</title>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
 
-  <style>
-    :root {
-      --bg: #000;
-      --fg: #fff;
-      --muted: rgba(255,255,255,0.6);
-      --glass: rgba(255,255,255,0.06);
-      --border: rgba(255,255,255,0.12);
-    }
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/prismjs/themes/prism-tomorrow.css">
+<script src="https://cdn.jsdelivr.net/npm/prismjs/prism.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/prismjs/components/prism-markup.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/prismjs/components/prism-javascript.min.js"></script>
 
-    body {
-      margin: 0;
-      background: var(--bg);
-      color: var(--fg);
-      font-family: Inter, -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif;
-      line-height: 1.6;
-    }
-
-    main {
-      max-width: 900px;
-      margin: 0 auto;
-      padding: 64px 24px;
-    }
-
-    a {
-      color: var(--fg);
-      text-decoration: none;
-    }
-
-    .back {
-      display: inline-block;
-      margin-bottom: 32px;
-      color: var(--muted);
-      font-size: 14px;
-    }
-
-    .card {
-      background: var(--glass);
-      backdrop-filter: blur(12px);
-      border: 1px solid var(--border);
-      border-radius: 20px;
-      padding: 32px;
-    }
-
-    h1 {
-      margin-top: 0;
-      font-size: 28px;
-    }
-
-    .impact {
-      color: var(--muted);
-      margin-bottom: 24px;
-    }
-
-    h2 {
-      font-size: 16px;
-      margin-top: 32px;
-    }
-  </style>
+<style>
+:root {
+  --bg:#000;--fg:#fff;--muted:rgba(255,255,255,.6);
+  --glass:rgba(255,255,255,.06);--border:rgba(255,255,255,.12);
+}
+body {
+  margin:0;background:var(--bg);color:var(--fg);
+  font-family:Inter,-apple-system,BlinkMacSystemFont,"SF Pro Text",sans-serif;
+  line-height:1.6;
+}
+main {max-width:900px;margin:0 auto;padding:64px 24px;}
+.back {color:var(--muted);text-decoration:none;font-size:14px;}
+.card {
+  margin-top:32px;padding:32px;border-radius:20px;
+  background:var(--glass);backdrop-filter:blur(12px);
+  border:1px solid var(--border);
+}
+pre {
+  border-radius:14px;
+  border:1px solid var(--border);
+}
+.try {
+  display:inline-block;margin-top:16px;padding:10px 16px;
+  border-radius:12px;border:1px solid var(--border);
+  color:var(--fg);text-decoration:none;
+}
+.try:hover {border-color:rgba(255,255,255,.3);}
+</style>
 </head>
+
 <body>
-  <main>
-    <a class="back" href="index.html">← Back</a>
+<main>
+<a class="back" href="index.html">← Back</a>
+<article class="card" id="content">Loading…</article>
+</main>
 
-    <article class="card" id="content">Loading…</article>
-  </main>
+<script>
+const id=new URLSearchParams(location.search).get("id");
 
-  <script>
-    const id = new URLSearchParams(location.search).get("id");
+fetch("src/data/vulns.json")
+  .then(r=>r.json())
+  .then(vulns=>{
+    const v=vulns.find(x=>x.id===id);
+    const c=document.getElementById("content");
+    if(!v){c.textContent="Not found";return;}
 
-    fetch("src/data/vulns.json")
-      .then(r => r.json())
-      .then(vulns => {
-        const v = vulns.find(x => x.id === id);
-        const c = document.getElementById("content");
+    let pocBlock='<p>PoC not available.</p>';
 
-        if (!v) {
-          c.textContent = "Vulnerability not found.";
-          return;
-        }
+    if(v.poc){
+      fetch(v.poc)
+        .then(r=>r.text())
+        .then(code=>{
+          pocBlock=`
+            <pre><code class="language-markup">${escapeHtml(code)}</code></pre>
+            <a class="try" href="${v.poc}" target="_blank" rel="noopener">Try now</a>
+          `;
+          render(pocBlock);
+        });
+    }
 
-        document.title = v.id;
+    function render(poc){
+      c.innerHTML=`
+        <h1>${v.id}</h1>
+        <p class="muted">${v.impact}</p>
+        <h2>Description</h2>
+        <p>${v.description}</p>
+        <h2>Proof of Concept</h2>
+        ${poc}
+      `;
+      Prism.highlightAll();
+    }
 
-        c.innerHTML = `
-          <h1>${v.id}</h1>
-          <div class="impact">${v.impact}</div>
+    if(!v.poc) render(pocBlock);
+  });
 
-          <h2>Description</h2>
-          <p>${v.description}</p>
-
-          <h2>Proof of Concept</h2>
-          <p>PoC not available yet.</p>
-        `;
-      });
-  </script>
+function escapeHtml(s){
+  return s.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+}
+</script>
 </body>
 </html>
