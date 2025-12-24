@@ -11,10 +11,17 @@
       --glass:rgba(255,255,255,.06);--border:rgba(255,255,255,.12);
     }
     body {
-      margin:0;background:var(--bg);color:var(--fg);
+      margin:0;
+      background:var(--bg);color:var(--fg);
       font-family:Inter,-apple-system,BlinkMacSystemFont,"SF Pro Text",sans-serif;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
     }
-    main {max-width:1100px;margin:0 auto;padding:64px 24px;}
+    main {
+      flex: 1;
+      max-width:1100px;margin:0 auto;padding:64px 24px;
+    }
     h1 {font-size:36px;margin-bottom:8px;}
     p {color:var(--muted);margin-bottom:48px;max-width:600px;}
     .list {display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:24px;}
@@ -26,31 +33,42 @@
     }
     .card:hover {transform:translateY(-2px);border-color:rgba(255,255,255,.25);}
     .cve {font-size:12px;color:var(--muted);margin-bottom:8px;}
+    
+    /* Стили для футера */
+    footer {
+      text-align: center;
+      padding: 24px;
+      color: var(--muted);
+      font-size: 14px;
+      border-top: 1px solid var(--border);
+      margin-top: 48px;
+    }
   </style>
 </head>
 <body>
-<main>
-  <h1>WKplace</h1>
-  <p>Simple vulnerability list with PoC(or without)</p>
-  <section class="list" id="list"></section>
-</main>
+  <main>
+    <h1>WKplace</h1>
+    <p>Simple vulnerability list with PoC(or without)</p>
+    <section class="list" id="list"></section>
+  </main>
 
-<script>
-fetch("src/data/vulns.json")
-  .then(r=>r.json())
-  .then(vulns=>{
-    const list=document.getElementById("list");
-    vulns.forEach(v=>{
-      const a=document.createElement("a");
-      a.className="card";
-      a.href=`page.html?id=${encodeURIComponent(v.id)}`;
-      a.innerHTML=`<div class="cve">${v.id}</div><div>${v.impact}</div>`;
-      list.appendChild(a);
-    });
-  });
-</script>
-<footer>
-  #stopwarinukraine
-</footer>
+  <footer>
+    #stopwarinukraine
+  </footer>
+
+  <script>
+    fetch("src/data/vulns.json")
+      .then(r=>r.json())
+      .then(vulns=>{
+        const list=document.getElementById("list");
+        vulns.forEach(v=>{
+          const a=document.createElement("a");
+          a.className="card";
+          a.href=`page.html?id=${encodeURIComponent(v.id)}`;
+          a.innerHTML=`<div class="cve">${v.id}</div><div>${v.impact}</div>`;
+          list.appendChild(a);
+        });
+      });
+  </script>
 </body>
 </html>
