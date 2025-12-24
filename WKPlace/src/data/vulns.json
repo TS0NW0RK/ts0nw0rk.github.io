@@ -1,0 +1,42 @@
+[
+  {
+    "id": "CVE-2025-43541",
+    "impact": "Processing maliciously crafted web content may lead to an unexpected Safari crash",
+    "description": "A type confusion issue was addressed with improved state handling."
+  },
+  {
+    "id": "CVE-2025-43536",
+    "impact": "Processing maliciously crafted web content may lead to an unexpected process crash",
+    "description": "A use-after-free issue was addressed with improved memory management."
+  },
+  {
+    "id": "CVE-2025-43535",
+    "impact": "Processing maliciously crafted web content may lead to an unexpected process crash",
+    "description": "The issue was addressed with improved memory handling."
+  },
+  {
+    "id": "CVE-2025-43501",
+    "impact": "Processing maliciously crafted web content may lead to an unexpected process crash",
+    "description": "A buffer overflow issue was addressed with improved memory handling."
+  },
+  {
+    "id": "CVE-2025-43531",
+    "impact": "Processing maliciously crafted web content may lead to an unexpected process crash",
+    "description": "A race condition was addressed with improved state handling."
+  },
+  {
+    "id": "CVE-2025-43529",
+    "impact": "Processing maliciously crafted web content may lead to arbitrary code execution",
+    "description": "A use-after-free issue was addressed with improved memory management."
+  },
+  {
+    "id": "CVE-2025-14174",
+    "impact": "Processing maliciously crafted web content may lead to memory corruption",
+    "description": "A memory corruption issue was addressed with improved validation."
+  },
+  {
+    "id": "CVE-2025-43511",
+    "impact": "Processing maliciously crafted web content may lead to an unexpected process crash",
+    "description": "A use-after-free issue was addressed with improved memory management."
+  }
+]
