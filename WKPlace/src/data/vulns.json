@@ -31,6 +31,7 @@
     "id": "CVE-2025-43529",
     "impact": "Processing maliciously crafted web content may lead to arbitrary code execution",
     "description": "A use-after-free issue was addressed with improved memory management."
+    "poc": "src/data/poc202543529"
   },
   {
     "id": "CVE-2025-14174",
